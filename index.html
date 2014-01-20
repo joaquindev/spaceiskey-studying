@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Studyin example of Space is Key</title>
+  <meta name="description" content="example studying html5 videogame">
+  <meta name="author" content="joaquindev">
+
+  <link rel="stylesheet" href="">
+
+  <!--[if lt IE 9]/>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="phaser.min.js"></script>
+  <style> body {margin:0} </style>
+  <script type="text/javascript" charset="utf-8">
+window.onload = function(){
+  var game = new Phaser.Game(640, 480, Phaser.CANVAS, "", {preload:onPreload, create:onCreate, update:onUpdate});
+  var theSquare;
+  var xSpeed = 4;
+  var jumpHeight = 40;
+  var jumpWidth = 120;
+  var jumpRotation = 180;
+  var jumpTime = 0;
+  var isJumping = false;
+  var degToRad = 0.0174532925;
+  var floorY = Array(92,184,276,368,460);
+  var currentFloor = 0;
+  var floorHeight = 20;
+  var levelStart = 0;
+  var levenEnd = 640;
+
+  function onPreload(){
+    game.load.image("square","square.png");
+  }
+
+  function jump(){
+    if(!isJumping) {
+      jumpTime = 0;
+      isJumping = true;
+    }
+  }
+
+  function onCreate(){ }
+  function onUpdate(){ }
+  function onRender(){}
+};
+  </script>
+</head>
+<body>
+</body>
+</html>
