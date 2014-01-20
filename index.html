@@ -28,7 +28,7 @@ window.onload = function(){
   var currentFloor = 0;
   var floorHeight = 20;
   var levelStart = 0;
-  var levenEnd = 640;
+  var levelEnd = 640;
 
   function onPreload(){
     game.load.image("square","square.png");
@@ -38,12 +38,54 @@ window.onload = function(){
     if(!isJumping) {
       jumpTime = 0;
       isJumping = true;
+      console.log('jumping');
     }
   }
 
-  function onCreate(){ }
-  function onUpdate(){ }
-  function onRender(){}
+  function onCreate(){
+    var floor = game.add.graphics(0,0);
+    floor.lineStyle(floorHeight, 0x00FF6E,1);
+    for(i=0;i<floorY.length;i++){
+      floor.moveTo(levelStart, floorY[i]+floorHeight/2);
+      floor.lineTo(levelEnd, floorY[i]+floorHeight/2);
+    }
+    theSquare = game.add.sprite(levelStart, floorY[currentFloor] - game.cache.getImage("square").height/2, "square");
+    theSquare.anchor.setTo(0.5,0.5);
+    game.input.onDown.add(jump, this);
+  }
+  function onUpdate(){
+    var mod = currentFloor % 2; //even or odd floor 
+    theSquare.x += xSpeed * (1-2*mod);//update squaer position
+    if(theSquare.x >= levelEnd && mod == 0 || theSquare.x < levelStart && mod ==1){
+      //if the square reached the end of the floor
+      currentFloor++; //move it to the next floor
+      if(currentFloor > floorY.length - 1){
+        currentFloor = 0;
+      }
+      mod = currentFloor % 2;
+      isJumping = false;
+      theSquare.rotation = 0;
+      theSquare.x = levelEnd * mod + levelStart*(1-mod);
+      theSquare.y = floorY[currentFloor] - game.cache.getImage("square").height/2;
+    }
+    if(isJumping){
+      var jumpFrames = jumpWidth / xSpeed; //number of frames we will be jumping
+      var degreesPerFrame = jumpRotation / jumpFrames *(1-2*mod);
+      var radiansPerFrame = (180/jumpFrames)*degToRad;
+      jumpTime++;
+      theSquare.angle += degreesPerFrame;
+      theSquare.y = floorY[currentFloor] - game.cache.getImage("square").height /2 - jumpHeight * Math.sin(radiansPerFrame*jumpTime);
+      if(jumpTime == jumpFrames){
+        isJumping = false;
+        theSquare.y = floorY[currentFloor] - game.cache.getImage("square").height / 2; 
+        
+      }
+      
+    }
+  }
+  function onRender(){
+    //empty
+  }
 };
   </script>
 </head>
